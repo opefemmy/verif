@@ -28,15 +28,23 @@
 
     <!-- Bulk Actions -->
     <div class="mb-6 flex flex-col sm:flex-row justify-end gap-3">
+        <button type="button" onclick="setBulkDownload('selected')" class="w-full sm:w-auto px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-bold hover:bg-blue-200 transition-colors border border-blue-200">Download Selected</button>
+        <button type="button" onclick="setBulkDownload('all')" class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm">Download All Records</button>
         <button type="button" onclick="setBulkAction('selected')" class="w-full sm:w-auto px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-bold hover:bg-red-200 transition-colors border border-red-200">Delete Selected</button>
         <button type="button" onclick="setBulkAction('all')" class="w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition-colors shadow-sm">Delete All Records</button>
     </div>
 
-    <!-- Hidden form for bulk actions -->
+    <!-- Hidden forms for bulk actions -->
     <form id="bulk-delete-form" action="{{ route('admin.certificates.bulk-delete') }}" method="POST" class="hidden">
         @csrf
         <input type="hidden" name="delete_all" id="delete-all-input" value="0">
         <div id="selected-ids-container"></div>
+    </form>
+
+    <form id="bulk-download-form" action="{{ route('admin.certificates.bulk-download') }}" method="POST" class="hidden">
+        @csrf
+        <input type="hidden" name="download_all" id="download-all-input" value="0">
+        <div id="download-ids-container"></div>
     </form>
 
     <div class="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
@@ -86,6 +94,7 @@
                             <td class="px-6 py-4 text-right space-x-2">
                                 <a href="{{ route('admin.certificates.show', $certificate) }}" class="text-blue-600 hover:text-blue-900 text-sm font-medium">View</a>
                                 <a href="{{ route('admin.certificates.edit', $certificate) }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">Edit</a>
+                                <a href="{{ route('admin.certificates.pdf', $certificate) }}" class="text-red-600 hover:text-red-900 text-sm font-medium" title="Download PDF">📄 PDF</a>
                                 <a href="{{ route('admin.certificates.download-qr', $certificate) }}" class="text-green-600 hover:text-green-900 text-sm font-medium" title="Download QR">📥 QR</a>
                                 <form action="{{ route('admin.certificates.destroy', $certificate) }}" method="POST" class="inline-block" onsubmit="return confirm('Permanently delete this record? This cannot be undone.');">
                                     @csrf
@@ -114,6 +123,33 @@
             const checkboxes = document.querySelectorAll('.cert-checkbox');
             checkboxes.forEach(cb => cb.checked = this.checked);
         });
+
+        function setBulkDownload(type) {
+            const form = document.getElementById('bulk-download-form');
+            const allInput = document.getElementById('download-all-input');
+            const container = document.getElementById('download-ids-container');
+
+            container.innerHTML = ''; // Clear previous selections
+
+            if (type === 'all') {
+                allInput.value = '1';
+            } else {
+                const checked = document.querySelectorAll('.cert-checkbox:checked');
+                if (checked.length === 0) {
+                    alert('Please select at least one certificate to download.');
+                    return;
+                }
+                allInput.value = '0';
+                checked.forEach(cb => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'certificates[]';
+                    input.value = cb.value;
+                    container.appendChild(input);
+                });
+            }
+            form.submit();
+        }
 
         function setBulkAction(type) {
             const form = document.getElementById('bulk-delete-form');

@@ -32,6 +32,9 @@ class InstitutionSettingController extends Controller
             'verification_title' => 'nullable|string|max:255',
             'verification_footer' => 'nullable|string',
             'favicon' => 'nullable|image|mimes:png,jpg,jpeg,ico|max:512',
+            'seal' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:4096',
+            'registrar_signature' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'rector_signature' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
         $settings = InstitutionSetting::first() ?? new InstitutionSetting();
@@ -48,6 +51,27 @@ class InstitutionSettingController extends Controller
                 Storage::disk('public')->delete($settings->favicon);
             }
             $validated['favicon'] = $request->file('favicon')->store('institution', 'public');
+        }
+
+        if ($request->hasFile('seal')) {
+            if ($settings->seal) {
+                Storage::disk('public')->delete($settings->seal);
+            }
+            $validated['seal'] = $request->file('seal')->store('institution', 'public');
+        }
+
+        if ($request->hasFile('registrar_signature')) {
+            if ($settings->registrar_signature) {
+                Storage::disk('public')->delete($settings->registrar_signature);
+            }
+            $validated['registrar_signature'] = $request->file('registrar_signature')->store('institution', 'public');
+        }
+
+        if ($request->hasFile('rector_signature')) {
+            if ($settings->rector_signature) {
+                Storage::disk('public')->delete($settings->rector_signature);
+            }
+            $validated['rector_signature'] = $request->file('rector_signature')->store('institution', 'public');
         }
 
         $settings->fill($validated);

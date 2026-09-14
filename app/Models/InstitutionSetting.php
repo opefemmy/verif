@@ -21,5 +21,10 @@ class InstitutionSetting extends Model
         'verification_title',
         'verification_footer',
         'favicon',
+        'seal',
+        'passport_x',
+        'passport_y',
+        'registrar_signature',
+        'rector_signature',
     ];
 }

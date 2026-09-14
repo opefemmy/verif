@@ -8,6 +8,7 @@ use App\Services\QrCodeService;
 use App\Services\AuditService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CertificateController extends Controller
 {
@@ -240,5 +241,39 @@ class CertificateController extends Controller
         $this->qrService->regenerateQrCode($certificate->verification_token, $certificate->matric_number);
         $this->auditService->log('qr_regenerated', 'Certificate', $certificate->id, ['matric_number' => $certificate->matric_number]);
         return redirect()->back()->with('success', 'QR code regenerated successfully.');
+    }
+
+    public function downloadPdf(Certificate $certificate)
+    {
+        $settings = \App\Models\InstitutionSetting::first();
+
+        // Use the professional design created in resources/views/admin/certificates/pdf.blade.php
+        $pdf = Pdf::loadView('admin.certificates.pdf', compact('certificate', 'settings'));
+
+        // Sanitize matric number for the filename to prevent "InvalidArgumentException"
+        // caused by slashes (e.g., HND/CS/2024/0001)
+        $sanitizedMatric = preg_replace('/[^A-Za-z0-9]/', '_', $certificate->matric_number);
+
+        return $pdf->download('Certificate_' . $sanitizedMatric . '.pdf');
+    }
+
+    public function downloadBulkPdf(Request $request)
+    {
+        $ids = $request->input('certificates', []);
+        $downloadAll = $request->boolean('download_all');
+
+        if ($downloadAll) {
+            $certificates = Certificate::all();
+        } elseif (!empty($ids)) {
+            $certificates = Certificate::whereIn('id', $ids)->get();
+        } else {
+            return redirect()->back()->with('error', 'Please select certificates to download.');
+        }
+
+        $settings = \App\Models\InstitutionSetting::first();
+
+        $pdf = Pdf::loadView('admin.certificates.bulk_pdf', compact('certificates', 'settings'));
+
+        return $pdf->download('Certificates_Bulk_' . now()->format('Ymd_His') . '.pdf');
     }
 }

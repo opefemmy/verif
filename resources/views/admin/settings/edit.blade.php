@@ -50,6 +50,16 @@
                         @endif
                         @error('favicon') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">Institution Seal</label>
+                        <input type="file" name="seal" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        @if($settings->seal)
+                            <div class="mt-2">
+                                <img src="{{ Storage::url($settings->seal) }}" class="h-20 w-20 rounded-full border" alt="Seal">
+                            </div>
+                        @endif
+                        @error('seal') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
                 </div>
             </div>
 
@@ -95,7 +105,32 @@
             </div>
 
             <div class="bg-white shadow rounded-lg p-6 space-y-6">
-                <h3 class="text-lg font-medium text-gray-900 border-b pb-2">Verification Portal Customization</h3>
+                <h3 class="text-lg font-medium text-gray-900 border-b pb-2">Authorized Signatures</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">Registrar Signature (PNG recommended)</label>
+                        <input type="file" name="registrar_signature" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        @if($settings->registrar_signature)
+                            <div class="mt-2">
+                                <img src="{{ Storage::url($settings->registrar_signature) }}" class="h-16 w-auto rounded border bg-gray-50" alt="Registrar Signature">
+                            </div>
+                        @endif
+                        @error('registrar_signature') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700">Rector Signature (PNG recommended)</label>
+                        <input type="file" name="rector_signature" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        @if($settings->rector_signature)
+                            <div class="mt-2">
+                                <img src="{{ Storage::url($settings->rector_signature) }}" class="h-16 w-auto rounded border bg-gray-50" alt="Rector Signature">
+                            </div>
+                        @endif
+                        @error('rector_signature') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white shadow rounded-lg p-6 space-y-6">
                 <div class="grid grid-cols-1 gap-6">
                     <div class="space-y-2">
                         <label class="block text-sm font-medium text-gray-700">Verification Page Title</label>

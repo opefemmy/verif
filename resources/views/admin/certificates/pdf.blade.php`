@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Certificate - {{ $certificate->full_name }}</title>
+    <style>
+        @page {
+            size: a4 portrait;
+            margin: 0;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            width: 210mm;
+            height: 297mm;
+        }
+        .page-wrapper {
+            width: 210mm;
+            height: 297mm;
+            position: relative;
+            box-sizing: border-box;
+            padding: 10mm;
+        }
+        .certificate-frame {
+            width: 190mm;
+            height: 277mm;
+            margin: 0 auto;
+            border: 10px double #0f172a;
+            position: relative;
+            box-sizing: border-box;
+            padding: 10mm;
+            background-color: #fff;
+        }
+        .inner-frame {
+            border: 2px solid #bfa100;
+            height: 257mm;
+            width: 170mm;
+            margin: 0 auto;
+            position: relative;
+            box-sizing: border-box;
+            padding: 15mm;
+            text-align: center;
+        }
+        .text-center { text-align: center; }
+
+        .logo {
+            width: 90px;
+            margin-bottom: 10px;
+        }
+        .institution-name {
+            font-size: 22pt;
+            font-weight: bold;
+            color: #0f172a;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .location-name {
+            font-size: 14pt;
+            color: #0f172a;
+            margin: 5px 0;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .motto {
+            font-size: 12pt;
+            font-style: italic;
+            color: #475569;
+            margin: 10px 0 30px 0;
+        }
+        .divider {
+            border-top: 1px solid #0f172a;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .cert-title-main {
+            font-size: 40pt;
+            font-weight: bold;
+            color: #0f172a;
+            margin: 30px 0 0 0;
+            text-transform: uppercase;
+        }
+        .cert-title-sub {
+            font-size: 20pt;
+            color: #bfa100;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0 0 30px 0;
+        }
+
+        .certify-text {
+            font-size: 14pt;
+            color: #0f172a;
+            margin: 30px 0 10px 0;
+            text-transform: uppercase;
+        }
+        .student-name {
+            font-size: 32pt;
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #0f172a;
+            margin: 10px 0;
+            text-decoration: underline;
+        }
+        .details-text {
+            font-size: 14pt;
+            color: #334155;
+            line-height: 1.6;
+            margin: 25px 0;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .date-section {
+            font-size: 13pt;
+            margin: 30px 0;
+            color: #0f172a;
+        }
+        .blank {
+            border-bottom: 1px solid #0f172a;
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .footer-table {
+            width: 100%;
+            margin-top: 50px;
+            border: none;
+        }
+        .sig-box {
+            width: 40%;
+            text-align: center;
+            vertical-align: bottom;
+        }
+        .sig-line {
+            border-top: 2px solid #0f172a;
+            width: 80%;
+            margin: 0 auto 5px auto;
+        }
+        .sig-label {
+            font-size: 12pt;
+            font-weight: bold;
+            color: #0f172a;
+            text-transform: uppercase;
+        }
+
+        .qr-footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            left: 0;
+            text-align: center;
+        }
+        .qr-code {
+            width: 70px;
+            height: 70px;
+        }
+        .cert-no {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 10pt;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="certificate-frame">
+            <div class="inner-frame">
+                <div class="text-center">
+                    @if($settings && $settings->logo)
+                        <img src="{{ public_path('storage/' . $settings->logo) }}" class="logo">
+                    @endif
+
+                    <div class="institution-name">{{ $settings->institution_name ?? 'EKITI STATE COLLEGE OF TECHNOLOGY' }}</div>
+                    <div class="location-name">{{ $settings->location ?? 'IJERO - EKITI' }}</div>
+                    <div class="motto">{{ $settings->motto ?? 'Knowledge, Skills, Innovation' }}</div>
+
+                    <div class="divider"></div>
+
+                    <div class="cert-title-main">Certificate</div>
+                    <div class="cert-title-sub">Of Achievement</div>
+
+                    <div class="certify-text">This is to certify that</div>
+
+                    <div class="student-name">{{ $certificate->full_name }}</div>
+
+                    <div class="details-text">
+                        has successfully completed the requirements for the award of <br>
+                        <span class="highlight">{{ $certificate->programme }}</span> <br>
+                        in the Department of <span class="highlight">{{ $certificate->department ?? $certificate->faculty ?? 'N/A' }}</span> <br>
+                        at <span class="highlight">{{ $settings->institution_name ?? 'Our Institution' }}</span>.
+                    </div>
+
+                    <div class="details-text" style="font-style: italic; font-size: 13pt;">
+                        and is hereby awarded this Certificate of Achievement.
+                    </div>
+
+                    <div class="date-section">
+                        Given this <span class="blank">{{ \Carbon\Carbon::parse($certificate->graduation_date)->format('d') }}</span>
+                        day of <span class="blank">{{ \Carbon\Carbon::parse($certificate->graduation_date)->format('F') }}</span>,
+                        20<span class="blank">{{ \Carbon\Carbon::parse($certificate->graduation_date)->format('y') }}</span>.
+                    </div>
+
+                    <table class="footer-table">
+                        <tr>
+                            <td class="sig-box">
+                                <div class="sig-line"></div>
+                                <div class="sig-label">Registrar</div>
+                            </td>
+                            <td style="width: 20%;"></td>
+                            <td class="sig-box">
+                                <div class="sig-line"></div>
+                                <div class="sig-label">Rector / Principal</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="cert-no">
+                    Certificate No: {{ $certificate->certificate_number }}
+                </div>
+                <div class="qr-footer">
+                    <img src="{{ route('admin.certificates.download-qr', $certificate->id) }}" class="qr-code">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

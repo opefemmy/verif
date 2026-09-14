@@ -44,10 +44,12 @@ Route::middleware('auth')->group(function () {
         Route::put('/settings', [InstitutionSettingController::class, 'update'])->name('settings.update');
 
         Route::post('certificates/bulk-delete', [CertificateController::class, 'bulkDelete'])->name('certificates.bulk-delete');
+        Route::post('certificates/bulk-download', [CertificateController::class, 'downloadBulkPdf'])->name('certificates.bulk-download');
         Route::resource('certificates', CertificateController::class);
         Route::post('certificates/{certificate}/revoke', [CertificateController::class, 'revoke'])->name('certificates.revoke');
         Route::post('certificates/{certificate}/restore', [CertificateController::class, 'restore'])->name('certificates.restore');
         Route::get('certificates/{certificate}/download-qr', [CertificateController::class, 'downloadQr'])->name('certificates.download-qr');
+        Route::get('certificates/{certificate}/pdf', [CertificateController::class, 'downloadPdf'])->name('certificates.pdf');
         Route::post('certificates/{certificate}/regenerate-qr', [CertificateController::class, 'regenerateQr'])->name('certificates.regenerate-qr');
 
         Route::get('/qr-codes', [QrCodeController::class, 'index'])->name('qr-codes.index');
