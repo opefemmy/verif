@@ -16,7 +16,9 @@
             <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-10 text-sm text-blue-800 space-y-3">
                 <p class="font-bold">Important Import Guidelines:</p>
                 <ul class="list-disc list-inside space-y-1">
-                    <li>File format must be .xlsx or .csv.</li>
+                    <li class="font-semibold">No photos? No problem!</li>
+                    <li>You can import students without passport photos. Simply upload your data file and <span class="font-bold underline">leave the Passport ZIP field empty</span>. The system will import the records without photos, and you can always add them later via the 'Edit' button.</li>
+                    <li class="pt-2">File format must be .xlsx or .csv.</li>
                     <li>The first row must contain the headers.</li>
                     <li>Required headers: <span class="font-mono font-bold">Full Name, Matric Number, Certificate Number, Programme</span>.</li>
                     <li>To import photos: Upload a .zip file containing images named after the matric numbers (e.g. <span class="font-mono">HND-CS-2024-0012.jpg</span>).</li>

@@ -90,13 +90,10 @@
                             <div class="p-8 md:p-16">
                                 <div class="flex flex-col lg:flex-row gap-16 items-center lg:items-start">
                                     <!-- Passport Photo -->
+                                    @if($cert->passport_photo)
                                     <div class="w-full lg:w-1/3 flex flex-col items-center">
                                         <div class="relative p-2 bg-white rounded-2xl shadow-2xl border border-slate-100">
-                                            @if($cert->passport_photo)
-                                                <img src="{{ Storage::url($cert->passport_photo) }}" class="w-56 h-56 rounded-xl object-cover" alt="Passport Photo">
-                                            @else
-                                                <div class="w-56 h-56 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 border-2 border-dashed">No Photo</div>
-                                            @endif
+                                            <img src="{{ Storage::url($cert->passport_photo) }}" class="w-56 h-56 rounded-xl object-cover" alt="Passport Photo">
                                             <div class="absolute -bottom-4 -right-4 bg-white p-3 rounded-full shadow-lg border border-slate-100">
                                                 <span class="text-3xl">🎓</span>
                                             </div>
@@ -106,9 +103,16 @@
                                             <p class="text-sm font-mono text-slate-500 bg-slate-100 px-3 py-1 rounded-full inline-block mt-2">{{ $cert->matric_number }}</p>
                                         </div>
                                     </div>
+                                    @endif
 
                                     <!-- Academic Info -->
-                                    <div class="w-full lg:w-2/3 space-y-8">
+                                    <div class="w-full {{ $cert->passport_photo ? 'lg:w-2/3' : 'lg:w-full' }} space-y-8">
+                                        @if(!$cert->passport_photo)
+                                            <div class="text-center mb-12">
+                                                <h3 class="text-4xl md:text-6xl font-black text-slate-900 mb-4">{{ $cert->full_name }}</h3>
+                                                <p class="text-lg font-mono text-slate-600 bg-slate-200 px-6 py-2 rounded-full inline-block font-bold">{{ $cert->matric_number }}</p>
+                                            </div>
+                                        @endif
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8">
                                             <div class="flex flex-col">
                                                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Programme</span>
