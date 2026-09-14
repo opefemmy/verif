@@ -251,8 +251,10 @@
                             @if($settings && $settings->logo)
                                 <img src="{{ public_path('storage/' . $settings->logo) }}" class="logo">
                             @endif
-                            <div class="inst-name">{{ $settings->institution_name ?? 'Institution Name' }}</div>
-                            <div class="inst-loc">{{ $settings->city ? $settings->city . ' ' . $settings->state : ($settings->location ?? 'Location') }}</div>
+                            <div class="inst-name">{{ $settings->institution_name ?? 'Institution Name' }},</div>
+                            <div class="inst-loc" style="font-size: 12pt; color: #0f172a; margin: 2px 0; font-weight: bold;">
+                                {{ $settings->city ? ($settings->city . ' - ' . $settings->state) : ($settings->location ?? 'Location') }}
+                            </div>
                             <div class="inst-motto">{{ $settings->motto ?? 'Motto' }}</div>
 
                             <div class="gold-divider"></div>

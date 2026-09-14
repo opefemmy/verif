@@ -9,6 +9,10 @@ class Certificate extends Model
 {
     use SoftDeletes;
 
+    protected $casts = [
+        'graduation_date' => 'date',
+    ];
+
     protected $fillable = [
         'full_name',
         'birth_name',

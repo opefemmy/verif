@@ -252,8 +252,23 @@
                         @if($settings && $settings->logo)
                             <img src="{{ public_path('storage/' . $settings->logo) }}" class="logo">
                         @endif
-                        <div class="inst-name">{{ $settings->institution_name ?? 'Institution Name' }}</div>
-                        <div class="inst-loc">{{ $settings->city ? $settings->city . ' ' . $settings->state : ($settings->location ?? 'Location') }}</div>
+                        @php
+                            $rawName = $settings->institution_name ?? 'Institution Name';
+                            if (str_contains($rawName, ',')) {
+                                $parts = explode(',', $rawName, 2);
+                                $displayName = trim($parts[0]);
+                                $displayLocation = trim($parts[1]);
+                            } else {
+                                $displayName = $rawName;
+                                $displayLocation = $settings->city ? ($settings->city . ' - ' . $settings->state) : ($settings->location ?? 'Location');
+                            }
+                        @endphp
+                        <div class="inst-name">{{ $displayName }},</div>
+                        @if($displayLocation)
+                            <div class="inst-loc" style="font-size: 12pt; color: #0f172a; margin: 2px 0; font-weight: bold;">
+                                {{ $displayLocation }}
+                            </div>
+                        @endif
                         <div class="inst-motto">{{ $settings->motto ?? 'Motto' }}</div>
 
                         <div class="gold-divider"></div>

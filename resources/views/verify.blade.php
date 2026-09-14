@@ -39,7 +39,23 @@
                 @if($settings && $settings->logo)
                     <img src="{{ Storage::url($settings->logo) }}" class="h-28 w-auto mx-auto mb-6" alt="Institution Logo">
                 @endif
-                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">{{ $settings->institution_name ?? 'Institutional' }}</h1>
+                @php
+                    $rawName = $settings->institution_name ?? 'Institutional';
+                    if (str_contains($rawName, ',')) {
+                        $parts = explode(',', $rawName, 2);
+                        $displayName = trim($parts[0]);
+                        $displayLocation = trim($parts[1]);
+                    } else {
+                        $displayName = $rawName;
+                        $displayLocation = $settings->city ? ($settings->city . ' - ' . $settings->state) : ($settings->location ?? '');
+                    }
+                @endphp
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">{{ $displayName }},</h1>
+                @if($displayLocation)
+                    <div class="text-slate-300 mt-2 text-lg font-medium leading-tight">
+                        {{ $displayLocation }}
+                    </div>
+                @endif
                 <p class="text-slate-400 mt-3 text-xl font-light italic">{{ $settings->motto ?? 'Official Certificate Verification Portal' }}</p>
             </div>
         </header>
